@@ -2,10 +2,10 @@
     "name": "fun-todo-together",
     "version": "1.0.0",
     "description": "A Todo App, which uses public APIs for entertainment, and a chat engine to help collaborate on work.",
-    "main": "src/App.js",
+    "main": "src/index.js",
     "scripts": {
-        "start": "node src/App.js",
-        "dev": "nodemon src/App.js"
+        "start": "node src/index.js",
+        "dev": "env-cmd -f ./config/dev.env nodemon src/index.js"
     },
     "keywords": [
         "NodeJS",
@@ -20,6 +20,7 @@
         "mongoose": "^6.1.10"
     },
     "devDependencies": {
-        "nodemon": "^2.0.15"
+        "nodemon": "^2.0.15",
+        "env-cmd": "^10.1.0"
     }
 }
