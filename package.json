@@ -1,0 +1,25 @@
+{
+    "name": "fun-todo-together",
+    "version": "1.0.0",
+    "description": "A Todo App, which uses public APIs for entertainment, and a chat engine to help collaborate on work.",
+    "main": "src/App.js",
+    "scripts": {
+        "start": "node src/App.js",
+        "dev": "nodemon src/App.js"
+    },
+    "keywords": [
+        "NodeJS",
+        "Express",
+        "SocketIO"
+    ],
+    "author": "piyush-mishra",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.2",
+        "mongodb": "^4.3.1",
+        "mongoose": "^6.1.10"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.15"
+    }
+}
