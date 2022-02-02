@@ -24,6 +24,15 @@ const userSchema = new mongoose.Schema({
     },
 });
 
+// Prevents sensitive details stored in DB to be sent as JSON response.
+userSchema.methods.toJSON = function () {
+    const userObject = this.toObject();
+
+    delete userObject.password;
+
+    return userObject;
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
