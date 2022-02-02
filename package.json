@@ -5,7 +5,7 @@
     "main": "src/index.js",
     "scripts": {
         "start": "node src/index.js",
-        "dev": "env-cmd -f ./config/dev.env nodemon src/index.js"
+        "dev": "env-cmd -f ./config/process.env nodemon src/index.js"
     },
     "keywords": [
         "NodeJS",
@@ -17,10 +17,11 @@
     "dependencies": {
         "express": "^4.17.2",
         "mongodb": "^4.3.1",
-        "mongoose": "^6.1.10"
+        "mongoose": "^6.1.10",
+        "validator": "^13.7.0"
     },
     "devDependencies": {
-        "nodemon": "^2.0.15",
-        "env-cmd": "^10.1.0"
+        "env-cmd": "^10.1.0",
+        "nodemon": "^2.0.15"
     }
 }
