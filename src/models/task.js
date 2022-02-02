@@ -5,20 +5,16 @@ const taskSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
+        maxLength:[50, 'Max 50 chars allowed for heading'],
     },
     detail: {
         type: String,
-        required: true,
         trim: true,
+        maxLength: [400,'Max 200 chars allowed for description'],
     },
     done: {
         type: Boolean,
         default: false,
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User',
     },
 });
 
