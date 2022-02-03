@@ -34,6 +34,12 @@ const userSchema = new mongoose.Schema({
     ],
 });
 
+userSchema.virtual('tasks', {
+    ref: 'Task',
+    localField: '_id',
+    foreignField: 'creator'
+});
+
 // Prevents sensitive details stored in DB to be sent as JSON response.
 userSchema.methods.toJSON = function () {
     const userObject = this.toObject();
