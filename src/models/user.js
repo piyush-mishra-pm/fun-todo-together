@@ -3,6 +3,8 @@ const validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const Task = require('./task');
+
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -61,6 +63,12 @@ userSchema.pre('save', async function (next) {
     next();
 })
 
+// When user is deleted, then also delete users tasks from the DB:
+userSchema.pre('remove', async function (next) {
+    const user = this;
+    await Task.deleteMany({ creator: user._id });
+    next();
+})
 
 userSchema.statics.loginHelper = async function (email, password) {
     // Does the email id exists in DB:
