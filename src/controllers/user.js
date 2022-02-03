@@ -1,12 +1,15 @@
 const User = require('../models/user');
 
+// On Sign-Up:
 const createUser = async (req, res, next) => {
     const user = new User(req.body);
     try {
         await user.save();
+        const token = await user.createAuthToken();
         return res.status(201).send({
             user,
             message: 'Created a User',
+            token: token,
         });
     } catch (e) {
         return res.status(400).send({
@@ -16,20 +19,50 @@ const createUser = async (req, res, next) => {
     }
 };
 
-const getUser = async (req, res, next) => {
-    try {
-        const userFound = await User.findOne({ _id: req.params.id });
-        if (!userFound)
-            return res
-                .status(404)
-                .send({ message: 'Could not find the resquested user' });
 
-        return res.send(userFound);
-    } catch (e) {
-        return res
-            .status(500)
-            .send({ message: `Error occurred while fetching the user: ${e}` });
+const logInUser = async (req, res, next) => {
+    try{
+        const user = await User.loginHelper(req.body.email, req.body.password);
+        const token =await user.createAuthToken();
+        return res.status(201).send({user,message:'logged in successfully',token});
+    }catch(e){
+        return res.status(400).send({message: `Error occurred while logging-in. ${e}`});
     }
+}
+
+const logOutUser = async (req,res, next) => {
+    try{
+        // As user is logging out on the current device, 
+        // so remove the token on this device from User's available list of tokens.
+        // Token attached with this device is present in the request body.
+        req.user.tokens = req.user.tokens.filter((t)=> {
+            return t.token !== req.token;
+        });
+        // Save the updated list of tokens 
+        // (after removing token for present device).
+        await req.user.save();
+
+        return res.send({message:'User logged out successfully'});
+
+    } catch (e){
+        return res.status(500).send({message:`Error occurred while logging out ${e}`});
+    }
+}
+
+// Log out the user from all devices by clearing out all the tokens.
+const logOutUserAllTokens = async (req,res, next) => {
+    try{
+        // Clear the tokens with User.
+        req.user.tokens = [];
+        await req.user.save();
+        return res.send({message:'Logged out from all devices successfully!'})
+    }catch(e){
+        return res.status(500).send({ message: `Error occurred while logging out from all devices! : ${e}` });
+    }
+}
+
+const getUser = async (req, res, next) => {
+    return res.send(req.user);
 };
 
 const updateUser = async (req, res, next) => {
@@ -47,21 +80,12 @@ const updateUser = async (req, res, next) => {
     }
 
     try {
-        const userFound = await User.findOne({ _id: req.params.id });
-
-        if (!userFound) {
-            return res.status(404).send({
-                message:
-                    'Could not find the user and hence will not update the user.',
-            });
-        }
-
         updatesAskedToDo.forEach(
-            update => (userFound[update] = req.body[update])
+            update => (req.user[update] = req.body[update])
         );
+        await req.user.save();
 
-        await userFound.save();
-        return res.send({ userFound, message: 'Requested Update finished.' });
+        return res.send({ user:req.user, message: 'Requested Update finished.' });
     } catch (e) {
         return res
             .status(500)
@@ -71,13 +95,8 @@ const updateUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
     try {
-        const userFound = await User.findOneAndDelete({ _id: req.params.id });
-
-        if (!userFound) {
-            return res.status(404).send({ message: 'Could not find the user' });
-        }
-
-        return res.send({ userFound, message: 'Deleted the requested user' });
+        await req.user.remove();
+        return res.send({ user:req.user, message: 'Deleted the requested user' });
     } catch (e) {
         return res.status(500).send({
             message: `Error occurred while deleting the user: ${e}`,
@@ -87,6 +106,9 @@ const deleteUser = async (req, res, next) => {
 
 module.exports = {
     createUser,
+    logInUser,
+    logOutUser,
+    logOutUserAllTokens,
     getUser,
     updateUser,
     deleteUser,
