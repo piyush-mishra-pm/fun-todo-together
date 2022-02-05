@@ -21,7 +21,8 @@ const auth = async(req,res,next) => {
         next();
 
     } catch(e){
-        res.status(401).send({message:`Authentication required!: ${e}`});
+        return res.status(401).redirect('/login');
+        //res.status(401).send({message:`Authentication required!: ${e}`});
     }
 }
 

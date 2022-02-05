@@ -1,0 +1,27 @@
+<%- include('../includes/head', {title: 'Login'})  %>
+<script src="scripts/loginHelper.js" defer></script>
+</head>
+
+<body>
+
+    <%- include('../includes/header')  %>
+
+    <main>
+        <h1>LogIn</h1>
+        <form id="login-form" action="/user/login" method="POST">
+            <div>
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" minlength = "6" required>
+            </div>
+
+            <button class="btn">Log-In</button>
+            <div><a href="/signup">SignUp instead</a></div>
+        </form>
+        <div id="feedback"></div>
+    </main>
+
+<%- include('../includes/footer') %>

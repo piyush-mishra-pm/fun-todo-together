@@ -7,12 +7,14 @@ const createUser = async (req, res, next) => {
         await user.save();
         const token = await user.createAuthToken();
         return res.status(201).send({
+            status:'ok',
             user,
             message: 'Created a User',
             token: token,
         });
     } catch (e) {
         return res.status(400).send({
+            status:'error',
             user,
             message: `Error occurred while creating the User: ${e}`,
         });
@@ -24,9 +26,9 @@ const logInUser = async (req, res, next) => {
     try{
         const user = await User.loginHelper(req.body.email, req.body.password);
         const token =await user.createAuthToken();
-        return res.status(201).send({user,message:'logged in successfully',token});
+        return res.send({status:'ok', user,message:'logged in successfully',token});
     }catch(e){
-        return res.status(400).send({message: `Error occurred while logging-in. ${e}`});
+        return res.status(400).send({status:'error', message: `Error occurred while logging-in. ${e}`});
     }
 }
 

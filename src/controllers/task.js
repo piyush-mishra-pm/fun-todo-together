@@ -43,7 +43,7 @@ const getTask = async (req, res, next) => {
 // PAGINATION: GET /task?limit=10&page=1
 // SORTING: GET /task?sortBy=createdAt:desc
 const getSelectedTasks = async (req,res,next)=>{
-    
+    console.log('requested tasks');
     // Filtering todos which are 'done'.
     const match ={};
     if(req.query.done){
@@ -72,9 +72,19 @@ const getSelectedTasks = async (req,res,next)=>{
                 sort,
             },
         });
-        res.send({tasks:req.user.tasks, message: 'Successfully fetched Tasks!'});
+        //res.send({tasks:req.user.tasks, message: 'Successfully fetched Tasks!'});
+        //console.log(req.user.tasks);
+        //return res.render('tasks/tasksPage',{tasks:req.user.tasks});
+        //return res.status(200).send({tasks:req.user.tasks, message: 'Successfully fetched Tasks!'});
+        return res.render(
+            'tasks/tasksPage',
+            { tasks: req.user.tasks },
+            (err, html) => {
+                res.send(html);
+            }
+        );
     } catch (e) {
-        res.status(500).send({message:`Error occurred while fetching tasks. ${e}`});
+        return res.status(500).send({message:`Error occurred while fetching tasks. ${e}`});
     }
 }
 
