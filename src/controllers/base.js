@@ -1,5 +1,5 @@
 function getHomePage(req, res) {
-    res.render('base');
+    return res.redirect('/tasks');
 }
 
 module.exports = {

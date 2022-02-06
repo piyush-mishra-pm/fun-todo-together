@@ -8,12 +8,12 @@ userRouter.post('/user/signup', userController.createUser);
 // Log-in
 userRouter.post('/user/login', userController.logInUser);
 // Log-out
-userRouter.post('/user/logout', authMiddleware, userController.logOutUser);
+userRouter.post('/user/logout', authMiddleware.allowOnlyAuthenticated, userController.logOutUser);
 // Log-Out from all the devices: clear the list of valid tokens for all the devices.
-userRouter.post('/user/logoutall', authMiddleware, userController.logOutUserAllTokens);
+userRouter.post('/user/logoutall', authMiddleware.allowOnlyAuthenticated, userController.logOutUserAllTokens);
 
-userRouter.get('/user/', authMiddleware, userController.getUser);
-userRouter.patch('/user/', authMiddleware, userController.updateUser);
-userRouter.delete('/user/', authMiddleware, userController.deleteUser);
+userRouter.get('/user/', authMiddleware.allowOnlyAuthenticated, userController.getUser);
+userRouter.patch('/user/', authMiddleware.allowOnlyAuthenticated, userController.updateUser);
+userRouter.delete('/user/', authMiddleware.allowOnlyAuthenticated, userController.deleteUser);
 
 module.exports = userRouter;

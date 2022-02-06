@@ -7,6 +7,15 @@
 
     <main>
         <h1>Tasks and Todos mentioned here</h1>
+        <h2>Create a Todo</h2>
+        <form>
+            <input type="text" id="task-heading" name="heading" placeholder="Task heading" required>
+            <input type="text" id="task-detail" name="detail" placeholder="Describe the task">
+            <input type="checkbox" id="task-done" name="done" required>
+            <button class="btn">Create Task</button>
+        </form>
+        <div id="feedback"></div>
+        <h2>Pre-existing Todos</h2>
         <ul>
             <% if(tasks) {for (const task of tasks) { %>
                 <li>

@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
+var cookieParser = require('cookie-parser');
+
 require('./db/mongoose');
 
 // Importing Routes:
@@ -12,6 +14,7 @@ const baseRoutes = require('./routes/base');
 
 // Parses incoming requests with JSON payloads 
 app.use(express.json());
+app.use(cookieParser());
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'views'));

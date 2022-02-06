@@ -76,13 +76,7 @@ const getSelectedTasks = async (req,res,next)=>{
         //console.log(req.user.tasks);
         //return res.render('tasks/tasksPage',{tasks:req.user.tasks});
         //return res.status(200).send({tasks:req.user.tasks, message: 'Successfully fetched Tasks!'});
-        return res.render(
-            'tasks/tasksPage',
-            { tasks: req.user.tasks },
-            (err, html) => {
-                res.send(html);
-            }
-        );
+        return res.render('tasks/tasksPage',{ tasks: req.user.tasks });
     } catch (e) {
         return res.status(500).send({message:`Error occurred while fetching tasks. ${e}`});
     }
