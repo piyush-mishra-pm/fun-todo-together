@@ -25,14 +25,11 @@ async function loginCallback(event) {
     console.log(result);
 
     // If login is successful then store the JWT token in cookies for future requests which need authentication.
-    // Then visit the home page.
+    // Then we refresh the page.
     if (result.status === 'ok') {
         feedback.innerHTML='';
-
-        // Storing the JWT token in cookies for future authentication.
-        document.cookie = result.token;
-
-        // Finally visiting the populated tasks page for the user.
+        // Storing the JWT token in cookies automatically happens by server's response in login and signup
+        // Finally reloadding the page and let the default routers which permit authenticated users carry us to the tasks page.
         location.reload();
     } 
     else if(result.status==='error') {
