@@ -7,10 +7,13 @@ var cookieParser = require('cookie-parser');
 require('./db/mongoose');
 
 // Importing Routes:
+const baseRoutes = require('./routes/base');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const taskRoutes = require('./routes/task');
-const baseRoutes = require('./routes/base');
+const chatRoutes = require('./routes/chat');
+const entertainmentRoutes = require('./routes/entertainment');
+
 
 // Parses incoming requests with JSON payloads 
 app.use(express.json());
@@ -25,5 +28,7 @@ app.use(baseRoutes);
 app.use(authRoutes);
 app.use(userRoutes);
 app.use(taskRoutes);
+app.use(chatRoutes);
+app.use(entertainmentRoutes);
 
 module.exports = app;
