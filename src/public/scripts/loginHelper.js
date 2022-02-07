@@ -33,12 +33,9 @@ async function loginCallback(event) {
         document.cookie = result.token;
 
         // Finally visiting the populated tasks page for the user.
-        window.location.href = await fetch('/',{
-            method: 'GET'
-        }).url;
+        location.reload();
     } 
-    
-    if(result.status==='error') {
+    else if(result.status==='error') {
         feedback.innerHTML=result.message;
     }
 }

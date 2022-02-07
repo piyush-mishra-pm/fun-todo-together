@@ -44,10 +44,10 @@ const logOutUser = async (req,res, next) => {
         // (after removing token for present device).
         await req.user.save();
 
-        return res.send({message:'User logged out successfully'});
+        return res.send({status:'ok', message:'User logged out successfully'});
 
     } catch (e){
-        return res.status(500).send({message:`Error occurred while logging out ${e}`});
+        return res.status(500).send({status:'error', message:`Error occurred while logging out ${e}`});
     }
 }
 
@@ -57,9 +57,9 @@ const logOutUserAllTokens = async (req,res, next) => {
         // Clear the tokens with User.
         req.user.tokens = [];
         await req.user.save();
-        return res.send({message:'Logged out from all devices successfully!'})
+        return res.send({status:'ok', message:'Logged out from all devices successfully!'})
     }catch(e){
-        return res.status(500).send({ message: `Error occurred while logging out from all devices! : ${e}` });
+        return res.status(500).send({ status:'error', message: `Error occurred while logging out from all devices! : ${e}` });
     }
 }
 
@@ -77,6 +77,7 @@ const updateUser = async (req, res, next) => {
 
     if (!canUpdate) {
         return res.status(400).send({
+            status:'error',
             message: 'Update is not allowed on the attributes requested.',
         });
     }
@@ -87,20 +88,21 @@ const updateUser = async (req, res, next) => {
         );
         await req.user.save();
 
-        return res.send({ user:req.user, message: 'Requested Update finished.' });
+        return res.send({ status:'ok', user:req.user, message: 'Requested Update finished.' });
     } catch (e) {
         return res
             .status(500)
-            .send({ message: `Error occurred while updating the user: ${e}` });
+            .send({ status:'error', message: `Error occurred while updating the user: ${e}` });
     }
 };
 
 const deleteUser = async (req, res, next) => {
     try {
         await req.user.remove();
-        return res.send({ user:req.user, message: 'Deleted the requested user' });
+        return res.send({ status:'ok', user:req.user, message: 'Deleted the requested user' });
     } catch (e) {
         return res.status(500).send({
+            status:'error',
             message: `Error occurred while deleting the user: ${e}`,
         });
     }

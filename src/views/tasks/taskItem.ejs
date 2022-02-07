@@ -1,5 +1,7 @@
-<article>
-  <h3><%=task.heading%></h3>
-  <p><%=task.detail%></p>
-  <p><%=task.done%></p>
+<article class="task-item item-with-bg" data-task-id=<%=task._id%>>
+  <h3 class="task-item-heading"><%=task.heading%></h3>
+  <p class="task-item-detail"><%=task.detail%></p>
+  <p class="task-item-done"><%=task.done%></p>
+  <i class="fas fa-pen-square btn-edit hover_button"></i>&nbsp;&nbsp;
+  <i class="fas fa-trash btn-delete hover_button"></i>
 </article>

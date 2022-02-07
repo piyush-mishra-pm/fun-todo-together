@@ -1,4 +1,5 @@
 <%- include('../includes/head', {title: 'Tasks'})  %>
+<script src="scripts/taskHelper.js" defer></script>
 </head>
 
 <body>
@@ -7,16 +8,18 @@
 
     <main>
         <h1>Tasks and Todos mentioned here</h1>
-        <h2>Create a Todo</h2>
+        <h2><span id="h2-create-task">Create</span> <span id="h2-edit-task" class="is-hidden">Edit</span> a Todo</h2>
         <form>
-            <input type="text" id="task-heading" name="heading" placeholder="Task heading" required>
-            <input type="text" id="task-detail" name="detail" placeholder="Describe the task">
-            <input type="checkbox" id="task-done" name="done" required>
-            <button class="btn">Create Task</button>
+            <input type="text" id="new-task-heading" name="heading" placeholder="Task heading">
+            <input type="text" id="new-task-detail" name="detail" placeholder="Describe the task">
+            <input type="checkbox" id="new-task-done" name="done" value="true">
+            <button id="form-btn-create">Create Task</button>
+            <button id="form-btn-update" class="is-hidden" data-task-id='x'>Update Task</button>
+            <button id="form-btn-cancel-update" class="is-hidden" data-task-id='x'>Cancel Update</button>
         </form>
         <div id="feedback"></div>
         <h2>Pre-existing Todos</h2>
-        <ul>
+        <ul class="edit-listener delete-listener">
             <% if(tasks) {for (const task of tasks) { %>
                 <li>
                     <%- include('taskItem', { task: task }) %>
@@ -24,6 +27,14 @@
             <% }} %>
         </ul>
         
+        <!-- Confirm Delete modal box -->
+        <div id="modal-confirm-delete" class="item-with-bg is-hidden" data-task-id="'x">
+            <div id="modal-content-delete" class="item-with-bg">
+                <p>Are you Sure</p>
+                <button id="btn-confirm-delete">Yes, delete Task.</button>
+                <button id="btn-cancel-delete">No, don't delete.</button>
+            </div>
+        </div>
     </main>
 
 <%- include('../includes/footer') %>

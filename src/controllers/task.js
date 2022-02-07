@@ -1,6 +1,9 @@
 const Task = require('../models/task');
 
+const debugEnabled = true;
+
 const createTask = async (req, res, next) => {
+    if(debugEnabled) console.log('Task Creation Asked', req.body);
     const task = new Task({
         ...req.body, 
         creator: req.user.id
@@ -9,11 +12,13 @@ const createTask = async (req, res, next) => {
     try {
         await task.save();
         return res.status(201).send({
+            status: 'ok',
             task,
             message: 'Created a task',
         });
     } catch (e) {
         return res.status(400).send({
+            status:'error',
             task,
             message: `Error occurred while creating the task: ${e}`,
         });
@@ -28,13 +33,13 @@ const getTask = async (req, res, next) => {
         if (!taskFound)
             return res
                 .status(404)
-                .send({ message: 'Could not find the resquested task' });
+                .send({ status:'error', message: 'Could not find the resquested task' });
 
-        return res.send(taskFound);
+        return res.send({status:'ok', taskFound});
     } catch (e) {
         return res
             .status(500)
-            .send({ message: `Error occurred while fetching the task: ${e}` });
+            .send({ status:'error', message: `Error occurred while fetching the task: ${e}` });
     }
 };
 
@@ -43,7 +48,7 @@ const getTask = async (req, res, next) => {
 // PAGINATION: GET /task?limit=10&page=1
 // SORTING: GET /task?sortBy=createdAt:desc
 const getSelectedTasks = async (req,res,next)=>{
-    console.log('requested tasks');
+    if (debugEnabled) console.log('requested to select tasks,',req.query);
     // Filtering todos which are 'done'.
     const match ={};
     if(req.query.done){
@@ -59,7 +64,7 @@ const getSelectedTasks = async (req,res,next)=>{
 
     // Pagination of TODDOs
     const currentPage = Number(req.query.page) || 1;
-    const limitPerPage = Number(req.query.limit) || 4;
+    const limitPerPage = Number(req.query.limit) || 25;
     const skip = limitPerPage * (currentPage - 1);
 
     try {
@@ -84,6 +89,7 @@ const getSelectedTasks = async (req,res,next)=>{
 
 const updateTask = async (req, res, next) => {
     // Check if all the updates which are asked to do, are even allowed:
+    if(debugEnabled) console.log('requested to update a task',req.body);
     const updatesAskedToDo = Object.keys(req.body);
     const allowedUpdates = ['heading', 'detail', 'done'];
     const canUpdate = updatesAskedToDo.every(update =>
@@ -92,21 +98,22 @@ const updateTask = async (req, res, next) => {
 
     if (!canUpdate){
         return res.status(400).send({
+            status:'error',
             message: 'Update is not allowed on all the requested attributes.',
         });
     }
 
     try {
         // Fetches a task only if the task id present in taskDB and also its creator is the user making request.
+        if (debugEnabled) console.log('extracting params', req.params.id);
         const taskFound = await Task.findOne({ _id: req.params.id, creator: req.user._id });
 
         if (!taskFound){
-            return res
-                .status(404)
-                .send({
-                    message:
-                        'Could not find the task and hence will not update the task.',
-                });
+            return res.status(404).send({
+                status: 'error',
+                message:
+                    'Could not find the task and hence will not update the task.',
+            });
         }
 
         updatesAskedToDo.forEach(
@@ -114,25 +121,27 @@ const updateTask = async (req, res, next) => {
         );
 
         await taskFound.save();
-        return res.send({ taskFound, message: 'Requested Update finished.' });
+        return res.send({ status:'ok', taskFound, message: 'Requested Update finished.' });
     } catch (e) {
         return res
             .status(500)
-            .send({ message: `Error occurred while updating the task: ${e}` });
+            .send({ status:'error', message: `Error occurred while updating the task: ${e}` });
     }
 };
 
 const deleteTask = async (req, res, next) => {
+    if (debugEnabled) console.log('requested to delete task, ', req.params);
     try {
         const taskFound = await Task.findOneAndDelete({ _id: req.params.id, creator: req.user._id });
 
         if (!taskFound) {
-            return res.status(404).send({ message: 'Could not find the task' });
+            return res.status(404).send({ status:'error', message: 'Could not find the task' });
         }
 
-        return res.send({ taskFound, message: 'Deleted the requested task' });
+        return res.send({ status:'ok', taskFound, message: 'Deleted the requested task' });
     } catch (e) {
         return res.status(500).send({
+            status:'error',
             message: `Error occurred while deleting the task: ${e}`,
         });
     }
