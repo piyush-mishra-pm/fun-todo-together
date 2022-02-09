@@ -4,6 +4,7 @@
  * 1. CREATING a new task.
  * 2. UPDATING a task.
  * 3. DELETING a task.
+ * 4. QUERIES:
  */
 
 // 1. Utilities: Common elements which can be used:
@@ -186,3 +187,27 @@ deleteListeners.forEach(listener=>listener.addEventListener('click', onDeleteBtn
 const deleteModal = document.getElementById('modal-confirm-delete');
 const btnConfirmDelete = document.getElementById('btn-confirm-delete').addEventListener('click',onConfirmDeleteClicked);
 const btnCancelDelete = document.getElementById('btn-cancel-delete').addEventListener('click',onCancelDeleteClicked);
+
+// 3. Queries tasks:
+const btnQueriesSubmit = document.getElementById('queries-btn-submit');
+const btnQueriesReset = document.getElementById('queries-btn-reset');
+const formQueries = document.getElementById('queries-form');
+btnQueriesReset.addEventListener('click',queriesResetHandler);
+btnQueriesSubmit.addEventListener('click', queriesSubmitHandler);
+async function queriesSubmitHandler(e) {
+    e.preventDefault();
+    console.log('clicked submit');
+    let queryUrl = '/tasks?';
+    if (formQueries.sort.value != 'none') queryUrl += 'sortBy=createdAt:'+formQueries.sort.value + '&'; // asc or desc
+    if (formQueries.done.value != 'both') queryUrl += 'done='+formQueries.done.value + '&'; // asc or desc
+    if (formQueries.limit.value >0 ) queryUrl += 'limit='+formQueries.limit.value; // asc or desc
+
+    location.href = queryUrl;
+}
+function queriesResetHandler(){
+    console.log('reset clicked');
+    formQueries.sort.value='none';
+    formQueries.done.value = 'both';
+    console.log(formQueries.limit.value);
+    formQueries.limit.value = 4;
+}

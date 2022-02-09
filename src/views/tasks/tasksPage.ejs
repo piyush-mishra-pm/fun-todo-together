@@ -18,7 +18,74 @@
             <button id="form-btn-cancel-update" class="is-hidden" data-task-id='x'>Cancel Update</button>
         </form>
         <div id="feedback"></div>
+
+        <% 
+            let prevUrl='/tasks?'; 
+            let nextUrl = '/tasks?';
+            if(!query.limit) query.limit=4;
+            if(currentPage>1) {
+                prevUrl+=`limit=${query.limit}&page=${currentPage-1}`;
+            }
+            if(currentPage<totalPages) {
+                nextUrl+=`limit=${query.limit}&page=${currentPage+1}`;
+            }
+            if(query.sortBy){ 
+                prevUrl+='&'+'sortBy='+query.sortBy;
+                nextUrl+='&'+'sortBy='+query.sortBy;
+            }
+            if(query.done){ 
+                prevUrl+='&'+'done='+query.done;
+                nextUrl+='&'+'done='+query.done;
+            }
+        %>
+
+        <div>
+            <h2>Queries</h2></br>
+            <form id="queries-form">
+                Sort by creation date (ascending/descending/no-sort):</br>
+
+                <input type="radio" id="queries-sort-asc" name="sort" value="asc" <% if(sort.createdAt===1) { %> checked <% } %>>
+                <label for="queries-sort-asc">Ascending</label>
+                        
+                <input type="radio" id="queries-sort-desc" name="sort" value="desc"<% if(sort.createdAt!==+1) { %> checked <% } %>>
+                <label for="queries-sort-desc">Descending (Default)</label></br>
+
+                Pagination options:</br>
+                <input type="number" id="queries-pagination-limit" name="limit" min="4" max="20" value=<%=query.limit%>>
+                <label for="queries-pagination-limit">Results per page</label></br>
+
+                Filter options:</br>
+                <input type="radio" id="queries-filter-done-both" name="done" value="both" <% if(match.done==undefined) { %> checked <% } %> >
+                <label for="queries-filter-done-both">Both</label>
+                        
+                <input type="radio" id="queries-filter-done-true" name="done" value="true" <% if(match.done==true) { %> checked <% } %> >
+                <label for="queries-filter-done-true">Completed only</label>
+                        
+                <input type="radio" id="queries-filter-done-false" name="done" value="false"<% if(match.done==false) { %> checked <% } %> >
+                <label for="queries-filter-done-false">Incomplete only</label></br>
+
+                <button type="submit" id="queries-btn-submit">Search</button></br>
+                <button type="reset" id="queries-btn-reset">Reset</button>
+            </form>            
+        </div>
+
         <h2>Pre-existing Todos</h2>
+        <p class="search-results">
+
+            <% if(currentPage>1) { %>
+                <a href= "<%=prevUrl%>">
+                    << &nbsp; 
+                </a>
+            <%}%>
+
+            Total <%=totalCount%> Tasks. 
+            Page <%=currentPage%> / <%=totalPages%>&nbsp;
+            <% if(currentPage<totalPages){%> 
+                <a href= "<%=nextUrl%>">
+                    >>
+                </a>
+            <%}%>
+        </p>
         <ul class="edit-listener delete-listener">
             <% if(tasks) {for (const task of tasks) { %>
                 <li>

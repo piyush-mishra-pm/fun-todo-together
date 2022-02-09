@@ -1,4 +1,5 @@
 const Task = require('../models/task');
+const User = require('../models/user');
 
 const debugEnabled = true;
 
@@ -44,9 +45,10 @@ const getTask = async (req, res, next) => {
 };
 
 // Gets a selection of task after filtering by query params, as follows:
-// FILTERING: GET /task?done=true (else done=false)
-// PAGINATION: GET /task?limit=10&page=1
-// SORTING: GET /task?sortBy=createdAt:desc
+// FILTERING: GET /tasks?done=true (else done=false)
+// PAGINATION: GET /tasks?limit=10&page=1
+// SORTING: GET /tasks?sortBy=createdAt:desc
+// add check for both options (true//false; asc desc; )
 const getSelectedTasks = async (req,res,next)=>{
     if (debugEnabled) console.log('requested to select tasks,',req.query);
     // Filtering todos which are 'done'.
@@ -59,15 +61,33 @@ const getSelectedTasks = async (req,res,next)=>{
     const sort = {};
     if (req.query.sortBy) {
         const sortQuery = req.query.sortBy.split(':');
-        sort[sortQuery[0]] = sortQuery[1] === 'desc' ? -1 : 1;
+        if(sortQuery[1] === 'desc' ) sort[sortQuery[0]] = -1;
+        if(sortQuery[1] === 'asc') sort[sortQuery[0]] = +1;
     }
+
+    console.log(sort);
+    console.log(sort.createdAt);
 
     // Pagination of TODDOs
     const currentPage = Number(req.query.page) || 1;
-    const limitPerPage = Number(req.query.limit) || 25;
+    const limitPerPage = Number(req.query.limit) || 5;
     const skip = limitPerPage * (currentPage - 1);
 
     try {
+        let totalCount
+        
+        if(match.done!=undefined) {
+            totalCount = await Task.find({
+                creator: req.user._id,
+                done: match.done,
+            }).count();
+        }
+        else totalCount = await Task.find({
+            creator: req.user._id
+        }).count();
+
+        console.log(totalCount);
+
         await req.user.populate({
             path: 'tasks',
             match,
@@ -81,7 +101,7 @@ const getSelectedTasks = async (req,res,next)=>{
         //console.log(req.user.tasks);
         //return res.render('tasks/tasksPage',{tasks:req.user.tasks});
         //return res.status(200).send({tasks:req.user.tasks, message: 'Successfully fetched Tasks!'});
-        return res.render('tasks/tasksPage',{ tasks: req.user.tasks });
+        return res.render('tasks/tasksPage',{ tasks: req.user.tasks , query:req.query, match,sort, currentPage, totalPages:Math.ceil(totalCount/limitPerPage), totalCount });
     } catch (e) {
         return res.status(500).send({message:`Error occurred while fetching tasks. ${e}`});
     }
