@@ -11,15 +11,32 @@
         <div id="feedback"></div>
         <h2>Poem of the day:</h2>
         <!-- https://poems.one/api/poem/#endpoint  -->
-        <h2>Cat Facts</h2>
-        <!--https://alexwohlbruck.github.io/cat-facts/docs/-->
-        <h2>Dog of the day</h2>
-        <!-- https://dog.ceo/dog-api/ -->
-        <h2>IUCN</h2>
-        <!-- https://apiv3.iucnredlist.org/api/v3/docs  -->
-        <h2>Harvard Museum</h2>
-        <!-- https://github.com/harvardartmuseums/api-docs  -->
+        <% if(gotPoem.status==='ok') { %>
+        Title: <%= gotPoem.title %></br>
+        Author: <%= gotPoem.author %></br>
+
+        <div style="white-space: pre-line">
+            <%= gotPoem.poem %>
+        </div>
+        <% } %>
+        <% if(gotPoem.status==='error') { %>
+            <%=gotPoem.message%>
+        <% } %>
+        </br>
         
+        <h2>NASA pic of the day</h2>
+        <% if(gotNasaPic.status==='error') {%>
+            <%= gotNasaPic.message%>
+        <% } else {%>
+        <h3><%= gotNasaPic.title%></h3>
+        <p><%= gotNasaPic.description%></p>
+        <%if(gotNasaPic.mediaType==='video'){%>
+            <iframe width="420" height="315" src="<%=gotNasaPic.imgUrl%>autoplay=1&mute=1">
+        <%} else {%>
+            <img src = "<%= gotNasaPic.imgUrl%>">
+        <%}%>
+        <%}%>
+</iframe>
     </main>
 
 <%- include('../includes/footer') %>
