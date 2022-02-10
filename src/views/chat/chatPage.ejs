@@ -1,5 +1,6 @@
 <%- include('../includes/head', {title: 'Chat Page'})  %>
-<!--<script src="scripts/taskHelper.js" defer></script>-->
+<link rel="stylesheet" href="styles/chat.css">
+<script src="scripts/chatHelper.js" defer></script>
 </head>
 
 <body>
@@ -8,7 +9,25 @@
 
     <main>
         <h1>Chat Page:</h1>
-        <div id="feedback"></div>        
+        <div id="feedback"></div>
+        <div id="chat-container">
+            <div id="chat-rooms-container">
+                <h3>Chat Rooms</h3>
+            </div>
+            <div id="chat-messages-container">
+                <div id="chat-room-messages-container">
+                    <h3>Chat Messages</h3>
+                    
+                </div>
+                <div id="chat-new-message-container">
+                    <input type="text" id="input-new-message">
+                    <button id="btn-send-message">Send</button>
+                </div>
+            </div>
+            <div id="chat-room-info-container">
+                <h3>Room-Info</h3>
+            </div>
+        </div>
     </main>
 
 <%- include('../includes/footer') %>

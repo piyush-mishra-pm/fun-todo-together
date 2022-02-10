@@ -1,0 +1,46 @@
+#chat-container{
+    display: grid;
+    gap: 1rem;
+    grid-auto-columns: 1fr;
+    grid-template-columns: 1rem 1fr 3fr 1fr 1rem ;
+    grid-template-areas:
+        "... rooms     messages          room-info ...";
+}
+
+#chat-rooms-container{
+    grid-area: rooms;
+}
+
+#chat-messages-container{
+    grid-area: messages;
+    display: flex;
+    flex-direction: column;
+}
+#chat-room-info-container{
+    grid-area: room-info;
+}
+#chat-room-messages-container{
+    flex:1 1 70vh;
+}
+#chat-new-message-container{
+    flex:1 1 5vh;
+    display:flex;
+    justify-content: space-between;
+}
+#input-new-message{
+    width:75%;
+}
+#btn-send-message{
+    width:25%;
+}
+
+@media only screen and (max-width: 600px)  {
+    #chat-container{
+        grid-template-columns: 1rem 1fr 1rem;
+        grid-template-rows: 2fr 3fr 1fr;
+        grid-template-areas:
+            "... rooms ..."
+            "... messages ..."
+            "... room-info ...";
+    }
+}
