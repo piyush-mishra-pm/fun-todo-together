@@ -16,17 +16,12 @@ const inputTaskHeading = document.getElementById('new-task-heading');
 const inputTaskDetail = document.getElementById('new-task-detail');
 const inputTaskDone = document.getElementById('new-task-done');
 
-// Heading texts (Create / Edit a task):
-const headingCreateTask = document.getElementById('h2-create-task');
-const headingEditTask = document.getElementById('h2-edit-task');
 
 // Reset the input fields:
 function resetInputFields(){
     inputTaskHeading.value='';
     inputTaskDetail.value = '';
     inputTaskDone.checked=false;
-    headingEditTask.classList.add('is-hidden');
-    headingCreateTask.classList.remove('is-hidden');
 }
 resetInputFields();
 
@@ -66,7 +61,14 @@ const createNewTask = async (event)=> {
 btnCreateNew.addEventListener('click', createNewTask);
 
 // 2. UPDATING a task:
+const modalUpdateTask = document.getElementById('modal-update-task');
+updateBtnInactive();
+
 const btnUpdate = document.getElementById('form-btn-update');
+
+const updateTaskHeading = document.getElementById('input-update-task-heading');
+const updateTaskDetail = document.getElementById('input-update-task-detail');
+const updateTaskDone = document.getElementById('input-update-task-done');
 
 const updateATask = async (event) => {
     const btnUpdate = event.target.closest('.btn-edit');
@@ -77,19 +79,11 @@ const updateATask = async (event) => {
 };
 
 function updateBtnActive(){
-    btnUpdate.classList.remove('is-hidden');
-    btnCancelUpdate.classList.remove('is-hidden');
-    btnCreateNew.classList.add('is-hidden');
-    headingEditTask.classList.remove('is-hidden');
-    headingCreateTask.classList.add('is-hidden');
+    modalUpdateTask.classList.remove('is-hidden');
 }
 
-function createBtnActive() {
-    btnUpdate.classList.add('is-hidden');
-    btnCancelUpdate.classList.add('is-hidden');
-    btnCreateNew.classList.remove('is-hidden');
-    headingEditTask.classList.add('is-hidden');
-    headingCreateTask.classList.remove('is-hidden');
+function updateBtnInactive() {
+    modalUpdateTask.classList.add('is-hidden');
 }
 
 function makeUpdateFormReady(taskItem) {
@@ -97,10 +91,13 @@ function makeUpdateFormReady(taskItem) {
     copyContentsInFormToEdit(taskItem);
 }
 
-function copyContentsInFormToEdit(taskItem) {
-    inputTaskHeading.value = taskItem.querySelector('.task-item-heading').innerHTML;
-    inputTaskDetail.value = taskItem.querySelector('.task-item-detail').innerHTML;
-    taskItem.querySelector('.task-item-done').innerHTML==='true' ? inputTaskDone.checked = true : inputTaskDone.checked = false;
+function copyContentsInFormToEdit(taskItem) {    
+    updateTaskHeading.value = taskItem.querySelector('.task-item-heading').innerHTML;
+    updateTaskDetail.value = taskItem.querySelector('.task-item-detail').innerHTML;
+    updateTaskDone.checked = taskItem.querySelector('.task-item-done').innerHTML === 'true'
+        ? true
+        : false;
+    
     const taskId = taskItem.dataset.taskId;
     btnUpdate.dataset.taskId = taskId;
 }
@@ -109,35 +106,36 @@ async function onUpdateBtnClicked(e){
     e.preventDefault();
     // Send update task data to server.
     const taskId = btnUpdate.dataset.taskId;
-    const updateResult = await fetch(`/task/${taskId}`,{
+    const updateResult = await fetch(`/task/${taskId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },  
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            heading: inputTaskHeading.value,
-            detail: inputTaskDetail.value,
-            done: inputTaskDone.checked? 'true': 'false',
+            heading: updateTaskHeading.value,
+            detail: updateTaskDetail.value,
+            done: updateTaskDone.checked ? 'true' : 'false',
         }),
-    }).then(res=> res.json());
+    }).then(res => res.json());
 
     // give feedback message upon successful update.
     feedback.innerHTML = updateResult.message;
     if(updateResult.status==='ok') feedback.innerHTML+=' Please refresh the page to see the change.';
 
     // toggle Update and Create button visibility.
-    createBtnActive();
+    updateBtnInactive();
     location.reload();
 }
 
-function onCancelUpdateClicked(){
-    createBtnActive();
+function onCancelUpdateClicked(e){
+    e.preventDefault();
+    updateBtnInactive();
     // Reset data attribute on update button.
     btnUpdate.dataset.taskId = 'x';
     // Resetting the input fields:
     resetInputFields();
 }
 
-const editListeners = document.querySelectorAll('.edit-listener');
-editListeners.forEach(listener=> listener.addEventListener('click', updateATask));
+const editListener = document.querySelector('.edit-listener');
+editListener.addEventListener('click', updateATask);
 btnUpdate.addEventListener('click', onUpdateBtnClicked);
 const btnCancelUpdate = document.getElementById('form-btn-cancel-update');
 btnCancelUpdate.addEventListener('click', onCancelUpdateClicked);
