@@ -134,7 +134,7 @@ function onCancelUpdateClicked(e){
     resetInputFields();
 }
 
-const editListener = document.querySelector('.edit-listener');
+const editListener = document.querySelector('.task-edit-listener');
 editListener.addEventListener('click', updateATask);
 btnUpdate.addEventListener('click', onUpdateBtnClicked);
 const btnCancelUpdate = document.getElementById('form-btn-cancel-update');
@@ -180,13 +180,13 @@ function onCancelDeleteClicked() {
 window.onclick = function (event) {
     if (event.target == deleteModal) onCancelDeleteClicked();
 };
-const deleteListeners = document.querySelectorAll('.delete-listener');
+const deleteListeners = document.querySelectorAll('.task-delete-listener');
 deleteListeners.forEach(listener=>listener.addEventListener('click', onDeleteBtnClicked));
 const deleteModal = document.getElementById('modal-confirm-delete');
 const btnConfirmDelete = document.getElementById('btn-confirm-delete').addEventListener('click',onConfirmDeleteClicked);
 const btnCancelDelete = document.getElementById('btn-cancel-delete').addEventListener('click',onCancelDeleteClicked);
 
-// 3. Queries tasks:
+// 4. Queries tasks:
 const btnQueriesSubmit = document.getElementById('queries-btn-submit');
 const btnQueriesReset = document.getElementById('queries-btn-reset');
 const formQueries = document.getElementById('queries-form');
@@ -209,3 +209,4 @@ function queriesResetHandler(){
     console.log(formQueries.limit.value);
     formQueries.limit.value = 4;
 }
+

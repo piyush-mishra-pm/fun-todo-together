@@ -10,7 +10,6 @@
     <main>
         <div id="feedback"></div>
 
-        <h1>Tasks and Todos mentioned here</h1>
         <h2>Create a Todo</h2>
         <form>
             <input type="text" id="new-task-heading" name="heading" placeholder="Task heading">
@@ -57,23 +56,24 @@
         %>
 
         <div>
-            <h2>Queries</h2></br>
+            <h2>Queries</h2>
             <form id="queries-form">
-                Sort by creation date (ascending/descending/no-sort):</br>
+                Sort by creation date :</br>
 
                 <input type="radio" id="queries-sort-asc" name="sort" value="asc" <% if(sort.createdAt===1) { %> checked <% } %>>
-                <label for="queries-sort-asc">Ascending</label>
+                <label for="queries-sort-asc">Newest first</label>
                         
                 <input type="radio" id="queries-sort-desc" name="sort" value="desc"<% if(sort.createdAt!==+1) { %> checked <% } %>>
-                <label for="queries-sort-desc">Descending (Default)</label></br>
+                <label for="queries-sort-desc">Oldest first (Default)</label></br>
 
-                Pagination options:</br>
+                </br>Pagination options:</br>
                 <input type="number" id="queries-pagination-limit" name="limit" min="4" max="20" value=<%=query.limit%>>
                 <label for="queries-pagination-limit">Results per page</label></br>
 
-                Filter options:</br>
+                </br>Filter options:</br>
+                Task status:
                 <input type="radio" id="queries-filter-done-both" name="done" value="both" <% if(match.done==undefined) { %> checked <% } %> >
-                <label for="queries-filter-done-both">Both</label>
+                <label for="queries-filter-done-both">Either(Defualt)</label>
                         
                 <input type="radio" id="queries-filter-done-true" name="done" value="true" <% if(match.done==true) { %> checked <% } %> >
                 <label for="queries-filter-done-true">Completed only</label>
@@ -81,7 +81,10 @@
                 <input type="radio" id="queries-filter-done-false" name="done" value="false"<% if(match.done==false) { %> checked <% } %> >
                 <label for="queries-filter-done-false">Incomplete only</label></br>
 
-                <button type="submit" id="queries-btn-submit">Search</button></br>
+                Text Search: 
+                <input type="text" id="input-text-search-filter" placeholder="Write heading or content text here" size="30"></br>
+                </br>
+                <button type="submit" id="queries-btn-submit">Search</button>
                 <button type="reset" id="queries-btn-reset">Reset</button>
             </form>            
         </div>

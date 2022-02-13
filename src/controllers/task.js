@@ -46,6 +46,7 @@ const getTask = async (req, res, next) => {
 
 // Gets a selection of task after filtering by query params, as follows:
 // FILTERING: GET /tasks?done=true (else done=false)
+// FILTERING: GET /tasks?txtSearch=textToSearch // TODO:
 // PAGINATION: GET /tasks?limit=10&page=1
 // SORTING: GET /tasks?sortBy=createdAt:desc
 // add check for both options (true//false; asc desc; )
@@ -97,8 +98,9 @@ const getSelectedTasks = async (req,res,next)=>{
                 sort,
             },
         });
+
         //res.send({tasks:req.user.tasks, message: 'Successfully fetched Tasks!'});
-        //console.log(req.user.tasks);
+        console.log(req.user.tasks);
         //return res.render('tasks/tasksPage',{tasks:req.user.tasks});
         //return res.status(200).send({tasks:req.user.tasks, message: 'Successfully fetched Tasks!'});
         return res.render('tasks/tasksPage', {
