@@ -34,6 +34,14 @@ const userSchema = new mongoose.Schema({
             },
         },
     ],
+    tags:[
+        {
+            name:{
+                type: String,
+                required: true,
+            }
+        },
+    ]
 });
 
 userSchema.virtual('tasks', {

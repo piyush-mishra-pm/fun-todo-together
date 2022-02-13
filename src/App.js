@@ -11,6 +11,7 @@ const baseRoutes = require('./routes/base');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const taskRoutes = require('./routes/task');
+const tagRoutes = require('./routes/tag');
 const chatRoutes = require('./routes/chat');
 const entertainmentRoutes = require('./routes/entertainment');
 
@@ -28,6 +29,7 @@ app.use(baseRoutes);
 app.use(authRoutes);
 app.use(userRoutes);
 app.use(taskRoutes);
+app.use(tagRoutes);
 app.use(chatRoutes);
 app.use(entertainmentRoutes);
 

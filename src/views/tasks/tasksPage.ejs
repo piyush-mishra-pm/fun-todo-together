@@ -17,10 +17,23 @@
             <input type="text" id="new-task-detail" name="detail" placeholder="Describe the task">
             <input type="checkbox" id="new-task-done" name="done" value="true">
             <button id="form-btn-create">Create Task</button>
-            <!--
-            <button id="form-btn-update" class="is-hidden" data-task-id='x'>Update Task</button>
-            <button id="form-btn-cancel-update" class="is-hidden" data-task-id='x'>Cancel Update</button>
-            -->
+
+        </br>
+        <h3>Assign Tags</h3>
+        <%if(tags==undefined){%>No tags created yet. Create a tag!</br><%}%>
+        <div id="tags-section">
+            <input type="text" id="input-create-new-tag"><button id="modify-tags-button">Create A tag</button>
+            <% if(tags){ %>
+                <button id="modify-tags-button">Modify tags</button>
+                <ul id="new-task-tags-list" class="tag-edit-listener tag-delete-listener">
+                <% for (const tag of tags) { %>
+                <li>
+                    <%- include('tagItem', { tag: tag }) %>
+                </li>
+            <% }} %>
+            </ul>
+        </div>
+
         </form>
 
         <% 
@@ -90,7 +103,7 @@
                 </a>
             <%}%>
         </p>
-        <ul class="edit-listener delete-listener">
+        <ul class="task-edit-listener task-delete-listener">
             <% if(tasks) {for (const task of tasks) { %>
                 <li>
                     <%- include('taskItem', { task: task }) %>
@@ -112,6 +125,25 @@
         </div>
         <!-- Confirm Delete Modal Box -->
         <div id="modal-confirm-delete" class="item-with-bg is-hidden" data-task-id="'x">
+            <div id="modal-content-delete" class="item-with-bg">
+                <p>Are you Sure</p>
+                <button id="btn-confirm-delete">Yes, delete Task.</button>
+                <button id="btn-cancel-delete">No, don't delete.</button>
+            </div>
+        </div>
+
+        <!-- Modify tag modal -->
+        <div id="modal-update-tag" class="item-with-bg is-hidden" data-tag-id="'x">
+            <div id="modal-content-update-tag" class="item-with-bg">
+                <form>
+                    <input type="text" id="input-update-tag" name="name" placeholder="Previous Tag">
+                    <button id="form-btn-confirm-update-tag">Update Task</button>
+                    <button id="form-btn-cancel-update-tag">Cancel Update</button>
+                </form>
+            </div>
+        </div>
+        <!-- Confirm delete tag modal -->
+        <div id="modal-confirm-delete-tag" class="item-with-bg is-hidden" data-task-id="'x">
             <div id="modal-content-delete" class="item-with-bg">
                 <p>Are you Sure</p>
                 <button id="btn-confirm-delete">Yes, delete Task.</button>

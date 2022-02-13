@@ -101,7 +101,19 @@ const getSelectedTasks = async (req,res,next)=>{
         //console.log(req.user.tasks);
         //return res.render('tasks/tasksPage',{tasks:req.user.tasks});
         //return res.status(200).send({tasks:req.user.tasks, message: 'Successfully fetched Tasks!'});
-        return res.render('tasks/tasksPage',{ tasks: req.user.tasks , query:req.query, match,sort, currentPage, totalPages:Math.ceil(totalCount/limitPerPage), totalCount });
+        return res.render('tasks/tasksPage', {
+            tags: [
+                { _id: 1, name: 'work' },
+                { _id: 2, name: 'hobby' },
+            ],
+            tasks: req.user.tasks,
+            query: req.query,
+            match,
+            sort,
+            currentPage,
+            totalPages: Math.ceil(totalCount / limitPerPage),
+            totalCount,
+        });
     } catch (e) {
         return res.status(500).send({message:`Error occurred while fetching tasks. ${e}`});
     }
