@@ -9,30 +9,32 @@
 
     <main>
         <div id="feedback"></div>
-
-        <h2>Create a Todo</h2>
-        <form id="form-new-task">
-            <input type="text" id="new-task-heading" name="heading" placeholder="Task heading">
-            <input type="text" id="new-task-detail" name="detail" placeholder="Describe the task">
-            <input type="checkbox" id="new-task-done" name="done" value="true">
-
-        </br>
-        <h3>Assign Tags</h3>
-        <%if(tags==undefined){%>No tags created yet. Create a tag!</br><%}%>
-        <div id="tags-section">
-            <% if(tags){ %>
-                    <ul id="new-task-tags-list" class="tag-edit-listener tag-delete-listener">
-                    <% for (const tag of tags) { %>
-                    <li>
-                        <%- include('tagItem', { tag: tag }) %>
-                    </li>
-            <% }} %>
-            </ul>
-            <input type="text" id="input-create-new-tag"><button id="create-new-tag-button">Create A tag</button>
+        <div class="item-with-bg item-with-shadow item-with-padding-margin" id="create-new-tasks-container">
+            
+            <h2>Create a Todo</h2>
+            <form id="form-new-task">
+                <input type="text" id="new-task-heading" name="heading" placeholder="Task heading">
+                <input type="text" id="new-task-detail" name="detail" placeholder="Describe the task">
+                <input type="checkbox" id="new-task-done" name="done" value="true">
+            
+            </br>
+            <h3>Assign Tags</h3>
+            <%if(tags==undefined){%>No tags created yet. Create a tag!</br><%}%>
+            <div id="tags-section">
+                <% if(tags){ %>
+                        <ul id="new-task-tags-list" class="tag-edit-listener tag-delete-listener">
+                        <% for (const tag of tags) { %>
+                        <li>
+                            <%- include('tagItem', { tag: tag }) %>
+                        </li>
+                <% }} %>
+                </ul>
+                <input type="text" id="input-create-new-tag"><button id="create-new-tag-button">Create A tag</button>
+            </div>
+        
+            </br></br><button id="form-btn-create">Create Task</button>
+            </form>
         </div>
-
-        </br></br><button id="form-btn-create">Create Task</button>
-        </form>
 
         <% 
             let prevUrl='/tasks?'; 
@@ -54,7 +56,7 @@
             }
         %>
 
-        <div>
+        <div class="item-with-bg item-with-shadow item-with-padding-margin" id="queries-section-container">
             <h2>Queries</h2>
             <form id="queries-form">
                 Sort by creation date :</br>
@@ -81,13 +83,13 @@
                 <label for="queries-filter-done-false">Incomplete only</label></br>
 
                 Text Search: 
-                <input type="text" id="input-text-search-filter" placeholder="Write heading or content text here" size="30"></br>
+                <input type="text" id="input-text-search-filter" placeholder="Not functional yet" size="30"></br>
                 </br>
                 <button type="submit" id="queries-btn-submit">Search</button>
                 <button type="reset" id="queries-btn-reset">Reset</button>
             </form>            
         </div>
-
+        <div id="tasks-section-container" class="item-with-bg item-with-shadow item-with-padding-margin">
         <h2>Pre-existing Todos</h2>
         <p class="search-results">
 
@@ -106,13 +108,6 @@
             <%}%>
         </p>
         <ul class="task-edit-listener task-delete-listener">
-            <%
-                /*console.log(tags);
-                const a = tags[0]._id.toString();
-                const b = tasks[0].tags[0]._id.toString();
-                console.log(a,b,a===b);*/
-            
-            %>
             <% if(tasks) {for (const task of tasks) { %>
                 <li>
                     <%
@@ -134,14 +129,15 @@
                 </li>
             <% }} %>
         </ul>
+        </div>
         
         <!-- Update Task Modal Box-->
         <div id="modal-update-task" class="item-with-bg is-hidden" data-task-id="'x">
             <div id="modal-content-update" class="item-with-bg">
-                <form>
-                    <input type="text" id="input-update-task-heading" name="heading" placeholder="Task heading">
-                    <input type="text" id="input-update-task-detail" name="detail" placeholder="Describe the task">
-                    <input type="checkbox" id="input-update-task-done" name="done" value="true">
+                <form id="form-update-task" class="item-with-bg">
+                    Heading:<input type="text" id="input-update-task-heading" name="heading" placeholder="Task heading">
+                    </br>Description:<input type="text" id="input-update-task-detail" name="detail" placeholder="Describe the task">
+                    Done: <input type="checkbox" id="input-update-task-done" name="done" value="true">
                     
                     <div id="edit-task-applied-tags-container">
                         <p>Already associated Tags:</p>
@@ -149,7 +145,7 @@
                         </ul>
                         <!-- Used by client Javascript to populate the already applied tags -->
                         <template id="template-applied-tag">
-                            <li>
+                            <li class="task-tag-name tag-item item-with-bg">
                                 <p class="tag-name"></p>
                                 <p class="btn-remove-tag hover_button item-with-bg" data-tag-id="x">x</p>
                             </li>
@@ -161,7 +157,7 @@
                         </ul>
                         <!-- Used by client Javascript to populate the tags still available to be applied. -->
                         <template id="template-available-tag">
-                            <li>
+                            <li class="task-tag-name tag-item item-with-bg">
                                 <p class="tag-name"></p>
                                 <p class="btn-add-tag hover_button item-with-bg" data-tag-id="x">+</p>
                             </li>

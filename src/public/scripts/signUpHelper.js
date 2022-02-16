@@ -27,6 +27,8 @@ async function signUpCallback(event) {
     if (result.status === 'ok') {
         feedback.innerHTML='';
         localStorage.setItem('FTT-token', result.token);
+        console.log('auth');
+        await location.reload();
     } 
     
     if(result.status==='error') {

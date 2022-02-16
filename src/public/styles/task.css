@@ -1,11 +1,10 @@
-.task-item{
-    --background-color: rgb(45, 241, 45);
-}
-.tag-item{
-    --background-color: rgb(238, 241, 45);
+.task-item.item-with-bg.task-list-item{
+    width:min(250px,100%);
+    --local-background-color:var(--color-grey-cold-50);
+    --local-box-shadow-blur-radius:var(--box-shadow-100);    
 }
 #modal-confirm-delete,#modal-update-task,#modal-update-tag,#modal-delete-utility{
-    --background-color: rgba(255, 58, 58, 0.24);
+    --local-background-color: var(--color-darker-100-transp);
     position: fixed;
     left: 0;
     top: 0;
@@ -14,7 +13,9 @@
     z-index: 1;
 }
 #modal-content-delete, #modal-content-update, #modal-content-update-tag,#modal-content-delete-utility{
-    --background-color: rgb(255, 255, 255);
+    --local-background-color: var(--color-accent-B-100-caution);
+    --local-padding-top:var(--padding-200);
+    --local-padding-left:var(--padding-100);
     margin: 25vh auto ;
     width:50vw;
     height: 30vh;
@@ -31,4 +32,74 @@
 .btn-remove-tag,
 .btn-add-tag{
     --background-color:orange;
+}
+
+#create-new-tasks-container,
+#queries-section-container,
+#tasks-section-container {
+    box-shadow: var(--local-box-shadow-top,0) var(--local-box-shadow-bottom,0) var(--local-box-shadow-blur-radius,0) var(--local-box-shadow-color, var(--color-darker-100));
+    --local-box-shadow-blur-radius:var(--box-shadow-100);
+    --local-margin-top:var(--padding-300);
+    --local-margin-left:var(--padding-100);
+    --local-padding-top:var(--padding-200);
+    --local-padding-left:var(--padding-100);
+}
+
+#new-task-tags-list{
+    display: grid;
+    gap:1rem;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    --local-background-color: var(--color-accent-A-100);
+    --local-box-shadow-blur-radius:0;
+}
+
+/*TAG logos*/
+.tag-item,
+.task-tag-name,
+.tag-item.item-with-padding-margin{
+    width:fit-content;
+    --local-background-color: var(--color-accent-A-100);
+    --local-margin-top:var(--padding-50);
+    --local-margin-left:var(--padding-100);
+}
+#edit-task-applied-tags-list .tag-item.item-with-bg{
+    --local-background-color: var(--color-accent-A-200);
+}
+.task-item-tags{
+    display: flex;
+    gap:1rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.task-edit-listener{
+    display: grid;
+    gap:1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+@media only screen and (max-width:800px) {
+    .task-edit-listener{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media only screen and (max-width:500px) {
+    .task-edit-listener{
+        grid-template-columns: 1fr;
+    }
+}
+
+#edit-task-applied-tags-list,
+#edit-task-available-tags-list{
+    display: flex;
+    gap:1rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+#edit-task-applied-tags-list li,
+#edit-task-available-tags-list li{
+    width:fit-content;
+}
+#form-update-task{
+    height:fit-content;
+    --local-background-color: var(--color-grey-cold-50);
 }

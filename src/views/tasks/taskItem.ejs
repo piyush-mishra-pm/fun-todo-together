@@ -1,7 +1,7 @@
-<article class="task-item item-with-bg" data-task-id=<%=task._id%>>
+<article class="task-item item-with-bg task-list-item item-with-shadow item-with-padding-margin" data-task-id=<%=task._id%>>
   <h3 class="task-item-heading"><%=task.heading%></h3>
   <p class="task-item-detail"><%=task.detail%></p>
-  <p class="task-item-done"><%=task.done%></p>
+  <p class="task-item-done">Done:<%=task.done%></p>
   <ul class="task-item-tags">
       <% if(taskTags) {for (const tag of taskTags) { %>
         <%- include('taskItemTag', { task: task , tag}) %>
