@@ -280,7 +280,7 @@ const removeTagFromTask = async (req, res, next) => {
     const taskId = req.params.taskid;
     const tagId = req.params.tagid;
 
-    console.log('tagId:', tagId, '\t taskId:', taskId);
+    //console.log('tagId:', tagId, '\t taskId:', taskId);
     try{
         // Check if even any task exists with requested task id and the userId.
         // User can only fetch tasks created by him, and can't access tasks created by other users.

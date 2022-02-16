@@ -11,28 +11,27 @@
         <div id="feedback"></div>
 
         <h2>Create a Todo</h2>
-        <form>
+        <form id="form-new-task">
             <input type="text" id="new-task-heading" name="heading" placeholder="Task heading">
             <input type="text" id="new-task-detail" name="detail" placeholder="Describe the task">
             <input type="checkbox" id="new-task-done" name="done" value="true">
-            <button id="form-btn-create">Create Task</button>
 
         </br>
         <h3>Assign Tags</h3>
         <%if(tags==undefined){%>No tags created yet. Create a tag!</br><%}%>
         <div id="tags-section">
-            <input type="text" id="input-create-new-tag"><button id="modify-tags-button">Create A tag</button>
             <% if(tags){ %>
-                <button id="modify-tags-button">Modify tags</button>
-                <ul id="new-task-tags-list" class="tag-edit-listener tag-delete-listener">
-                <% for (const tag of tags) { %>
-                <li>
-                    <%- include('tagItem', { tag: tag }) %>
-                </li>
+                    <ul id="new-task-tags-list" class="tag-edit-listener tag-delete-listener">
+                    <% for (const tag of tags) { %>
+                    <li>
+                        <%- include('tagItem', { tag: tag }) %>
+                    </li>
             <% }} %>
             </ul>
+            <input type="text" id="input-create-new-tag"><button id="create-new-tag-button">Create A tag</button>
         </div>
 
+        </br></br><button id="form-btn-create">Create Task</button>
         </form>
 
         <% 
@@ -107,9 +106,31 @@
             <%}%>
         </p>
         <ul class="task-edit-listener task-delete-listener">
+            <%
+                /*console.log(tags);
+                const a = tags[0]._id.toString();
+                const b = tasks[0].tags[0]._id.toString();
+                console.log(a,b,a===b);*/
+            
+            %>
             <% if(tasks) {for (const task of tasks) { %>
                 <li>
-                    <%- include('taskItem', { task: task }) %>
+                    <%
+                        // Tags relevant to a task:
+                        let taskTags = [];
+                        task.tags.forEach(tagId=> {
+                            // Tag is boud to be unique (as per its ID).
+                            const matchingTag = tags.filter(
+                                t=>t._id.toString()===tagId.toString()
+                                )[0];
+                            taskTags.push({
+                            _id:matchingTag._id,
+                            name:matchingTag.name,
+                            })
+                        });
+                        //console.log(taskTags);
+                    %>
+                    <%- include('taskItem', { task: task , taskTags}) %>
                 </li>
             <% }} %>
         </ul>
@@ -121,6 +142,31 @@
                     <input type="text" id="input-update-task-heading" name="heading" placeholder="Task heading">
                     <input type="text" id="input-update-task-detail" name="detail" placeholder="Describe the task">
                     <input type="checkbox" id="input-update-task-done" name="done" value="true">
+                    
+                    <div id="edit-task-applied-tags-container">
+                        <p>Already associated Tags:</p>
+                        <ul id="edit-task-applied-tags-list">
+                        </ul>
+                        <!-- Used by client Javascript to populate the already applied tags -->
+                        <template id="template-applied-tag">
+                            <li>
+                                <p class="tag-name"></p>
+                                <p class="btn-remove-tag hover_button item-with-bg" data-tag-id="x">x</p>
+                            </li>
+                        </template>
+                    </div>
+                    <div id="edit-task-available-tags-container">
+                        <p>Available Tags to apply:</p>
+                        <ul id="edit-task-available-tags-list">
+                        </ul>
+                        <!-- Used by client Javascript to populate the tags still available to be applied. -->
+                        <template id="template-available-tag">
+                            <li>
+                                <p class="tag-name"></p>
+                                <p class="btn-add-tag hover_button item-with-bg" data-tag-id="x">+</p>
+                            </li>
+                        </template>
+                    </div>
                     <button id="form-btn-update" data-task-id='x'>Update Task</button>
                     <button id="form-btn-cancel-update">Cancel Update</button>
                 </form>
@@ -135,22 +181,28 @@
             </div>
         </div>
 
-        <!-- Modify tag modal -->
+        <!-- Modify tag modal.-->
+        <!-- Modifies the tags which user has created. 
+            It does not add or remove tags from tasks 
+            (which is done while modifying tasks). -->
         <div id="modal-update-tag" class="item-with-bg is-hidden" data-tag-id="'x">
             <div id="modal-content-update-tag" class="item-with-bg">
                 <form>
                     <input type="text" id="input-update-tag" name="name" placeholder="Previous Tag">
-                    <button id="form-btn-confirm-update-tag">Update Task</button>
-                    <button id="form-btn-cancel-update-tag">Cancel Update</button>
+                    <button id="form-btn-confirm-update-tag">Update Tag</button>
+                    <button id="form-btn-cancel-update-tag">Cancel</button>
+                    <button id="form-btn-delete-tag">Delete</button>
                 </form>
             </div>
         </div>
-        <!-- Confirm delete tag modal -->
-        <div id="modal-confirm-delete-tag" class="item-with-bg is-hidden" data-task-id="'x">
-            <div id="modal-content-delete" class="item-with-bg">
+
+        <!-- Confirm Delete Modal (Commonly used for Tags and Tasks) -->
+        <div id="modal-delete-utility" class="item-with-bg is-hidden">
+            <div id="modal-content-delete-utility" class="item-with-bg">
+                <p id="msg-delete-utility"></p>
                 <p>Are you Sure</p>
-                <button id="btn-confirm-delete">Yes, delete Task.</button>
-                <button id="btn-cancel-delete">No, don't delete.</button>
+                <button id="btn-confirm-delete-utility">Confirm delete</button>
+                <button id="btn-cancel-delete-utility">Cancel Delete</button>
             </div>
         </div>
     </main>

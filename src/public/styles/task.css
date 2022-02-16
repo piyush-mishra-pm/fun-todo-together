@@ -4,7 +4,7 @@
 .tag-item{
     --background-color: rgb(238, 241, 45);
 }
-#modal-confirm-delete,#modal-update-task{
+#modal-confirm-delete,#modal-update-task,#modal-update-tag,#modal-delete-utility{
     --background-color: rgba(255, 58, 58, 0.24);
     position: fixed;
     left: 0;
@@ -13,10 +13,22 @@
     width:100%;
     z-index: 1;
 }
-#modal-content-delete, #modal-content-update{
+#modal-content-delete, #modal-content-update, #modal-content-update-tag,#modal-content-delete-utility{
     --background-color: rgb(255, 255, 255);
     margin: 25vh auto ;
     width:50vw;
     height: 30vh;
-
+}
+/* Confirm Delete Utility*/
+#modal-delete-utility{
+    z-index: 2;
+    --background-color: rgba(223, 21, 21, 0.24);
+}
+#modal-content-delete-utility{
+    --background-color: rgb(255, 103, 103);
+    z-index: 3;
+}
+.btn-remove-tag,
+.btn-add-tag{
+    --background-color:orange;
 }

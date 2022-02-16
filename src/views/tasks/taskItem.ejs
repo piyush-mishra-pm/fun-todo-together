@@ -2,6 +2,11 @@
   <h3 class="task-item-heading"><%=task.heading%></h3>
   <p class="task-item-detail"><%=task.detail%></p>
   <p class="task-item-done"><%=task.done%></p>
+  <ul class="task-item-tags">
+      <% if(taskTags) {for (const tag of taskTags) { %>
+        <%- include('taskItemTag', { task: task , tag}) %>
+      <% }} %>
+  </ul>
   <i class="fas fa-pen-square btn-edit hover_button"></i>&nbsp;&nbsp;
   <i class="fas fa-trash btn-delete hover_button"></i>
 </article>

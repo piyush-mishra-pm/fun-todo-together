@@ -5,8 +5,9 @@ const debugEnabled = true;
 
 const createTask = async (req, res, next) => {
     if(debugEnabled) console.log('Task Creation Asked', req.body);
+    //console.log(req.body);
     const task = new Task({
-        ...req.body, 
+        ...req.body,
         creator: req.user.id
     });
 
@@ -66,8 +67,6 @@ const getSelectedTasks = async (req,res,next)=>{
         if(sortQuery[1] === 'asc') sort[sortQuery[0]] = +1;
     }
 
-    console.log(sort);
-    console.log(sort.createdAt);
 
     // Pagination of TODDOs
     const currentPage = Number(req.query.page) || 1;
@@ -87,8 +86,6 @@ const getSelectedTasks = async (req,res,next)=>{
             creator: req.user._id
         }).count();
 
-        console.log(totalCount);
-
         await req.user.populate({
             path: 'tasks',
             match,
@@ -100,14 +97,10 @@ const getSelectedTasks = async (req,res,next)=>{
         });
 
         //res.send({tasks:req.user.tasks, message: 'Successfully fetched Tasks!'});
-        console.log(req.user.tasks);
         //return res.render('tasks/tasksPage',{tasks:req.user.tasks});
         //return res.status(200).send({tasks:req.user.tasks, message: 'Successfully fetched Tasks!'});
         return res.render('tasks/tasksPage', {
-            tags: [
-                { _id: 1, name: 'work' },
-                { _id: 2, name: 'hobby' },
-            ],
+            tags: req.user.tags,
             tasks: req.user.tasks,
             query: req.query,
             match,
@@ -125,7 +118,7 @@ const updateTask = async (req, res, next) => {
     // Check if all the updates which are asked to do, are even allowed:
     if(debugEnabled) console.log('requested to update a task',req.body);
     const updatesAskedToDo = Object.keys(req.body);
-    const allowedUpdates = ['heading', 'detail', 'done'];
+    const allowedUpdates = ['heading', 'detail', 'done','tags'];
     const canUpdate = updatesAskedToDo.every(update =>
         allowedUpdates.includes(update)
     );
