@@ -4,7 +4,7 @@ A Todo App at heart, which also uses third party APIs for entertainment, and a C
 
 
 ## **Video Walkthrough**:
-
+[![Video Walkthrough](https://img.youtube.com/vi/JZVSObpzrlk/maxresdefault.jpg)](https://youtu.be/JZVSObpzrlk)
 
 ---
 ---
